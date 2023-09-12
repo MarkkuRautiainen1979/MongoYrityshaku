@@ -56,57 +56,38 @@ function Valinta() {
   }, []);
 
   const handleCityChange = () => {
-    const selectedCityItem = items.find(item => item.Kaupunki.toUpperCase() === cityInput.toUpperCase());
-
-    if (selectedCityItem) {
-      setSelectedCity(cityInput.toUpperCase());
-      setPaikkakunta(cityInput.toUpperCase());
-      setFirma('Ei valittua yritystä');
-      setSelectedCompany('');
-      setIsCitySelected(true);
-      setIsCompanySelected(false);
-      setNameInput('');
-      setShowAll(false);
-    } else {
-      setSelectedCity('');
-      setPaikkakunta('Sen nimistä paikkakuntaa ei löydy tietokannasta');
-      setFirma('');
-      setSelectedCompany('');
-      setIsCitySelected(false);
-      setIsCompanySelected(false);
-      setNameInput('');
-      setShowAll(false);
-
-    }
-  
+    setSelectedCity(cityInput.toUpperCase());
+    setPaikkakunta(cityInput.toUpperCase());
+    setFirma('Ei valittua yritystä');
+    setSelectedCompany('');
+    setIsCitySelected(true);
+    setIsCompanySelected(false);
+    setNameInput('');
+    setShowAll(false);
   };
 
   const handleCompanyChange = () => {
-    const selectedCompanyItem = items.find(item => item.Nimi.toLowerCase() === nameInput.toLowerCase());
-    
-    if (selectedCompanyItem) {
-      setSelectedCompany(nameInput);
-      setFirma(nameInput);
-      setPaikkakunta(selectedCompanyItem.Kaupunki);
-      setOsoite(selectedCompanyItem.Osoite);
-      setYhteystiedot(selectedCompanyItem.Yhteystiedot);
-      setIsCompanySelected(true);
-      setIsCitySelected(false);
-      setCityInput('');
-      setShowAll(false);
-    } else {
-      // Jos yritystä ei löydy, voit asettaa arvot tyhjiksi tai oletusarvoiksi
-      setSelectedCompany('');
-      setFirma('Sen nimistä yritystä ei löydy tietokannasta');
-      setPaikkakunta('');
-      setOsoite('');
-      setYhteystiedot('');
-      setIsCompanySelected(false);
-      setIsCitySelected(false);
-      setCityInput('');
-      setShowAll(false);
-    }
-  };
+    setSelectedCompany(nameInput);
+    setFirma(nameInput);
+    setSelectedCity('');
+    setIsCompanySelected(true);
+    setIsCitySelected(false);
+    setCityInput('');
+    setShowAll(false);
+
+     // Aseta paikkakunta tietueen item.kaupunki arvoksi
+   const selectedCompanyItem = items.find(item => item.Nimi.toLowerCase() === nameInput.toLowerCase());
+  if (selectedCompanyItem) {
+   setPaikkakunta(selectedCompanyItem.Kaupunki);
+   setOsoite(selectedCompanyItem.Osoite);
+   setYhteystiedot(selectedCompanyItem.Yhteystiedot);
+  } else {
+    // Jos yritystä ei löydy, voit asettaa paikkakunnan tyhjäksi tai joksikin oletusarvoksi
+    setPaikkakunta('TUNTEMATON');
+    setOsoite(selectedCompanyItem.Osoite);
+    setYhteystiedot(selectedCompanyItem.Yhteystiedot);
+  }
+};
 
   
 
