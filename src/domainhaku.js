@@ -6,8 +6,8 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question('Anna yrityksen nimi: ', (companyName) => {
-  const apiUrl = `https://domainhakuapi.zoner.fi/wp-json/domainhaku/v1/status?whois&domain=`;
+rl.question('Anna .fi loppuisen verkkotunnuksen nimi , (älä kirjoita alkuun www. vaan pelkästään esim. nokia.fi:) ', (domainName) => {
+  const apiUrl = `https://domainhakuapi.zoner.fi/wp-json/domainhaku/v1/status?whois&domain=${domainName}`;
 
   https.get(apiUrl, (response) => {
     let data = '';
@@ -19,25 +19,59 @@ rl.question('Anna yrityksen nimi: ', (companyName) => {
 
     // Kun koko vastaus on vastaanotettu
     response.on('end', () => {
-      // Etsitään "name" -kohdan ja "holder name" -kohdan arvot tekstinä
+      // Etsitään "name" -kohdan arvoa tekstinä
       const lines = data.split('\n');
       let nameValue = '';
-      let holderNameValue = '';
+      let expiressValue = '';
+      let addressValue = '';
+      let postalValue = '';
+      let cityValue = '';
+ //     let phoneValue = '';
+ //     let emailValue = '';
 
       for (const line of lines) {
         if (line.startsWith('name...............:')) {
           nameValue = line.replace('name...............:', '').trim();
-        }
-        if (line.startsWith('holder name........:')) {
-          holderNameValue = line.replace('holder name........:', '').trim();
+          break;
         }
       }
 
-      if (nameValue && holderNameValue && holderNameValue === companyName) {
+      for (const line of lines) {
+        if (line.startsWith('expires............:')) {
+          expiressValue = line.replace('expires............:', '').trim();
+          break;
+        }
+      }
+
+      for (const line of lines) {
+        if (line.startsWith('address............:')) {
+          addressValue = line.replace('address............:', '').trim();
+          break;
+        }
+      }
+
+      for (const line of lines) {
+        if (line.startsWith('postal.............:')) {
+          postalValue = line.replace('postal.............:', '').trim();
+          break;
+        }
+      }
+
+      for (const line of lines) {
+        if (line.startsWith('city...............:')) {
+          cityValue = line.replace('city...............:', '').trim();
+          break;
+        }
+      }
+
+
+      if (nameValue) {
         // Tulostetaan "name" -kohdan arvo konsoliin
-        console.log(`Yrityksellä on domain osoite: ${nameValue}`);
+        console.log('Domain on varattu', nameValue,'-nimiselle haltijalle');
+        console.log('Domain varaus umpeutuu :',expiressValue)
+        console.log('Haltijan osoite : ',addressValue , postalValue , cityValue )
       } else {
-        console.error('Yrityksen nimellä ei löytynyt domain-osoitetta.');
+        console.error('Ei löytynyt varattuna listasta, domain saattaa olla vapaa');
       }
 
       rl.close();

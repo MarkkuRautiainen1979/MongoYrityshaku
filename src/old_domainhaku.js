@@ -32,9 +32,9 @@ rl.question('Anna .fi loppuisen verkkotunnuksen nimi , (älä kirjoita alkuun ww
 
       if (nameValue) {
         // Tulostetaan "name" -kohdan arvo konsoliin
-        console.log('Yrityksen nimi:', nameValue);
+        console.log('Domain on varattu', nameValue,'-nimiselle haltijalle');
       } else {
-        console.error('Yrityksen nimeä ei löydy.');
+        console.error('Ei löytynyt varattuna listasta, domain saattaa olla vapaa');
       }
 
       rl.close();
