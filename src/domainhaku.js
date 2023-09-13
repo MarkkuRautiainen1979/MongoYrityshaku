@@ -26,8 +26,8 @@ rl.question('Anna .fi loppuisen verkkotunnuksen nimi , (älä kirjoita alkuun ww
       let addressValue = '';
       let postalValue = '';
       let cityValue = '';
- //     let phoneValue = '';
- //     let emailValue = '';
+      let phoneValue = '';
+      let emailValue = '';
 
       for (const line of lines) {
         if (line.startsWith('name...............:')) {
@@ -64,12 +64,26 @@ rl.question('Anna .fi loppuisen verkkotunnuksen nimi , (älä kirjoita alkuun ww
         }
       }
 
+      for (const line of lines) {
+        if (line.startsWith('phone..............:')) {
+          phoneValue = line.replace('phone..............:', '').trim();
+          break;
+        }
+      }
+
+      for (const line of lines) {
+        if (line.startsWith('holder email.......:')) {
+          emailValue = line.replace('holder email.......:', '').trim();
+          break;
+        }
+      }
 
       if (nameValue) {
-        // Tulostetaan "name" -kohdan arvo konsoliin
         console.log('Domain on varattu', nameValue,'-nimiselle haltijalle');
         console.log('Domain varaus umpeutuu :',expiressValue)
         console.log('Haltijan osoite : ',addressValue , postalValue , cityValue )
+        console.log('Puhelin :', phoneValue)
+        console.log('E-mail :',emailValue)
       } else {
         console.error('Ei löytynyt varattuna listasta, domain saattaa olla vapaa');
       }
