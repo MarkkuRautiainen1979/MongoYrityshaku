@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
+import kunnatData from './kunnat.json'; // json tiedosto haetaan .\src - kansiosta
+
 
 function AddPopup ({ paikkakunta, lat, lon, firma, osoite,yhteystiedot }) {
-  const [markerPosition, setMarkerPosition] = useState([lat, lon]);
+  const [markerPosition, setMarkerPosition] = useState([lat, lon]); 
 
-   // Määrittele ikonin URL ternary operaattorilla
-   const customIcon = new L.Icon({
-    iconUrl: paikkakunta === "JOENSUU" ? './joensuu.png' : './infoicon.png',
+// Etsi kunnat.json-tiedostosta vastaava iconUrl paikkakunnan perusteella
+const kuntaInfo = kunnatData.find((item) => item.nimi === paikkakunta);
+const iconUrl = kuntaInfo && kuntaInfo.kuntaurl && kuntaInfo.kuntaurl.length > 0 ? kuntaInfo.kuntaurl[0] : './infoicon.png';
+  
+ const customIcon = new L.Icon({
+    iconUrl: iconUrl,
     iconSize: [80, 80],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
@@ -42,9 +47,9 @@ useEffect(() => {
 }, [lat, lon]);
 
 // Tarkista, onko yhteystiedot URL-osoite
-const isURL = yhteystiedot.startsWith("www.")
+const isURL = yhteystiedot.startsWith("www.") || yhteystiedot.endsWith(".fi") || yhteystiedot.endsWith(".com");
 
- // Lisää "http://" etuliite, jos se puuttuu
+ // Lisää "http://" etuliite, että saadaan todellinen tehtyä todellinen linkki.
  const correctedURL =  `http://${yhteystiedot}`;
  console.log(correctedURL)
 
